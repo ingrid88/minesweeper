@@ -4,10 +4,11 @@ class Board
   attr_reader :grid, :mine_positions
   NEIGHBORS_DELTAS = [[-1,-1],[-1,0],[-1,1],[0,1],[1,0],[1,1],[1,-1],[0,-1]]
   NUM_BOMBS = 10
-  BOARD_SIZE = 9
+  BOARD_HEIGHT = 9
+  BOARD_WIDTH = 9
 
   def initialize
-    @grid = Array.new(BOARD_SIZE) { Array.new(BOARD_SIZE) }
+    @grid = Array.new(BOARD_HEIGHT) { Array.new(BOARD_WIDTH) }
     @mine_positions = generate_mine_positions
     populate_board
   end
@@ -37,8 +38,8 @@ class Board
   def generate_mine_positions
     mine_positions = []
     until mine_positions.length == NUM_BOMBS
-      rand_x = rand(0...BOARD_SIZE)
-      rand_y = rand(0...BOARD_SIZE)
+      rand_x = rand(0...BOARD_HEIGHT)
+      rand_y = rand(0...BOARD_WIDTH)
       mine_positions << [rand_x, rand_y] if !mine_positions.include?([rand_x, rand_y])
     end
     mine_positions
