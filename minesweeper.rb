@@ -14,7 +14,7 @@ class Minesweeper
       board.each_index do |col|
         has_bomb = false
         has_bomb = true if mine_positions.include?([row, col])
-        board[row][col] = Tile.new(has_bomb)
+        board[row][col] = Tile.new(has_bomb, num_neighbor_bombs([row,col]))
       end
     end
 
@@ -22,17 +22,16 @@ class Minesweeper
 
   def [](pos)
     x,y = pos
-    board[x][y]
+    @board[x][y]
   end
 
   def num_neighbor_bombs(pos)
     num_bombs = 0
     neighbors(pos).each do |n_pos|
-      num_bombs += 1 if board[n_pos].has_bomb
+      num_bombs += 1 if mine_positions.include?(n_pos)
     end
     num_bombs
   end
-
 
   def neighbors(pos)
     x, y = pos
@@ -66,17 +65,22 @@ class Minesweeper
     end
   end
 
+
 end
 
 class Tile
-  attr_accessor :has_bomb, :flagged, :revealed,
-  def initialize(has_bomb)
+  attr_accessor :flagged, :revealed
+  attr_reader :num_bombs, :has_bomb
+
+  def initialize(has_bomb, num_bombs)
     @has_bomb = has_bomb
     @flagged = false
     @revealed = false
+    @num_bombs = num_bombs
   end
 
   def to_s
+
   end
 
 end
