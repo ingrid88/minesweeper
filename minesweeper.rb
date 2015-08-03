@@ -11,12 +11,8 @@ class Minesweeper
     mine_positions = add_mines
     board.each_index do |row|
       board.each_index do |col|
-        bombed = nil
-        if mine_positions.include?([row, col])
-          bombed = true
-        else
-          bombed = false
-        end
+        bombed = false
+        bombed = true if mine_positions.include?([row, col])
         board[row][col] = Tile.new(bombed)
       end
     end
