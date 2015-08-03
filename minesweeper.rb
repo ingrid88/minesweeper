@@ -1,6 +1,7 @@
 class Minesweeper
   NUM_BOMBS = 10
   BOARD_SIZE = 9
+  NEIGHBORS_DELTAS = [[-1,-1],[-1,0],[-1,1],[0,1],[1,0],[1,1],[1,-1],[0,-1]]
   attr_reader :board, :mine_positions
 
   def initialize
@@ -13,12 +14,31 @@ class Minesweeper
       board.each_index do |col|
         bombed = false
         bombed = true if mine_positions.include?([row, col])
-        board[row][col] = Tile.new(bombed,neighbor_bombs)
+        board[row][col] = Tile.new(bombed)
       end
     end
 
   end
 
+  def [](pos)
+    x,y = pos
+    board[x][y]
+  end
+
+  def num_neighbor_bombs(pos)
+
+    board[pos].bombed
+  end
+
+
+  def neighbors(pos)
+    new_pos_list = []
+    NEIGHBORS_DELTAS.each do |change|
+      dx,dy = change
+      new_pos_list << [x + dx, y + dy]
+    end
+    new_pos_list
+  end
 
 
   def add_mines
@@ -43,12 +63,11 @@ class Minesweeper
 end
 
 class Tile
-  attr_accessor :bombed, :flagged, :revealed, :neighbor_bombs
-  def initialize(bombed,neighbor_bombs)
+  attr_accessor :bombed, :flagged, :revealed,
+  def initialize(bombed)
     @bombed = bombed
     @flagged = false
     @revealed = false
-    @neighbor_bombs = neighbor_bombs
   end
 
   def to_s
