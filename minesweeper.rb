@@ -80,7 +80,17 @@ class Tile
   end
 
   def to_s
-
+    #if revealed and if num_bombs > 0 then print num_bombs value
+    # if not revealed print *
+    # if revealed and if num_bombs = 0 then print __
+    # if flagged then print F
+    return "F" if flagged
+    return "*" if !revealed
+    if revealed && num_bombs > 0
+      return num_bombs
+    else
+      "_"
+    end
   end
 
 end
