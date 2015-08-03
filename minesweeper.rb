@@ -6,8 +6,8 @@ class Minesweeper
 
   def initialize
     @board = Array.new(BOARD_SIZE) { Array.new(BOARD_SIZE) }
-    populate_board
     @mine_positions = add_mines
+    populate_board
   end
 
   def populate_board
@@ -41,9 +41,7 @@ class Minesweeper
       dx,dy = change
       new_pos_list << [x + dx, y + dy]
     end
-    new_pos_list.select do |pos|
-      pos.all? {|coord| coord.between?(0,8)}
-    end
+    new_pos_list.select{ |pos| in_board?(pos) }
   end
 
   def add_mines
@@ -74,6 +72,7 @@ class Minesweeper
   end
 
   def render
+    system('clear')
     board.each do |row|
       row.each do |tile|
         print tile.to_s
@@ -89,21 +88,38 @@ class Minesweeper
 
   def run
     until has_won?
-      prompt_user
       render
+      prompt_user
     end
     puts "You won!"
   end
 
   def prompt_user
     puts "Input position and r/f (reveal or flag)"
-    input = gets.chomp
+    input = gets.chomp.split(",")
+
     handle_input(input)
   end
 
   def handle_input(input)
-    coord, opt = input
+    x,y,opt = input
+    x, y = x.to_i, y.to_i
+    if in_board?([x,y])
+      case opt
+      when 'r'
+        reveal([x,y])
+      when 'f'
+        flag_bomb([x,y])
+      else
+        puts "Invalid option"
+      end
+    else
+      puts "Invalid coordinate"
+    end
+  end
 
+  def in_board?(pos)
+      pos.all? {|coord| coord.between?(0,8)}
   end
 
   def has_won?
