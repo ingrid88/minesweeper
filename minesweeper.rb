@@ -45,7 +45,6 @@ class Minesweeper
     end
   end
 
-
   def add_mines
     mine_positions = []
     until mine_positions.length == NUM_BOMBS
@@ -54,6 +53,22 @@ class Minesweeper
       mine_positions << [rand_x, rand_y] if !mine_positions.include?([rand_x, rand_y])
     end
     mine_positions
+  end
+
+  def reveal(pos)
+    # if position has a bomb the user loses firstly
+    raise "you lose" if self[pos].has_bomb
+    # if the number of bombs is greater than zero then set revealed = true
+    #self[pos].revealed = true if self[pos].num_bombs > 0
+    # if # bombs is 0 then look at neighbors
+    self[pos].revealed = true
+    if self[pos].num_bombs == 0
+      #figure out neighbor
+      neighbors(pos).each do |n_pos|
+        reveal(n_pos) unless (self[n_pos].has_bomb || self[n_pos].revealed)
+      end
+    end
+    #nil
   end
 
   def render
@@ -80,16 +95,12 @@ class Tile
   end
 
   def to_s
-    #if revealed and if num_bombs > 0 then print num_bombs value
-    # if not revealed print *
-    # if revealed and if num_bombs = 0 then print __
-    # if flagged then print F
-    return "F" if flagged
-    return "*" if !revealed
+    return "F " if flagged
+    return "* " if !revealed
     if revealed && num_bombs > 0
-      return num_bombs
+      return "#{num_bombs} "
     else
-      "_"
+      "_ "
     end
   end
 
