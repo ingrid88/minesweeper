@@ -33,6 +33,15 @@ class Minesweeper
     mine_positions
   end
 
+  def render
+    board.each do |row|
+      row.each do |tile|
+        print tile.to_s
+      end
+      print "\n"
+    end
+  end
+
 end
 
 class Tile
@@ -42,4 +51,8 @@ class Tile
     @flagged = false
     @revealed = false
   end
+
+  def to_s
+  end
+
 end
