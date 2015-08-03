@@ -6,6 +6,7 @@ class Minesweeper
 
   def initialize
     @board = Array.new(BOARD_SIZE) { Array.new(BOARD_SIZE) }
+    populate_board
     @mine_positions = add_mines
   end
 
@@ -82,11 +83,36 @@ class Minesweeper
   end
 
   def flag_bomb(pos)
-
     return if self[pos].revealed
     self[pos].flagged = !self[pos].flagged
   end
 
+  def run
+    until has_won?
+      prompt_user
+      render
+    end
+    puts "You won!"
+  end
+
+  def prompt_user
+    puts "Input position and r/f (reveal or flag)"
+    input = gets.chomp
+    handle_input(input)
+  end
+
+  def handle_input(input)
+    coord, opt = input
+
+  end
+
+  def has_won?
+    # all unbombed tiles revealed
+
+    # if revealed and if not bombed
+    flattened = board.flatten
+    !flattened.any?{ |tile| !tile.has_bomb && !tile.revealed}
+  end
 
 end
 
@@ -110,5 +136,13 @@ class Tile
       "_ "
     end
   end
+
+end
+
+
+if __FILE__ == $PROGRAM_NAME
+
+  m = Minesweeper.new
+  m.run
 
 end
