@@ -43,18 +43,17 @@ class Minesweeper
 
 
   def prompt_user
-    puts "Input position and r/f (reveal or flag)"
+    puts "Input position and r/f (reveal or flag), or 's' to save game"
     input = gets.chomp.split(",")
-
     handle_input(input)
   end
 
   def handle_input(input)
-    puts input
-    sleep(3)
     if input == ['s']
       save_game
-      puts "your game was saved"
+      puts "Your game was saved."
+      sleep(1)
+      return
     end
     x,y,opt = input
     x, y = x.to_i, y.to_i
@@ -93,6 +92,13 @@ end
 
 
 if __FILE__ == $PROGRAM_NAME
-  m = Minesweeper.new
+  if ARGV.length > 0
+    # convert the file into a minesweeper object
+    game_save = File.read(ARGV.shift)
+    m = YAML.load(game_save)
+    puts m
+  else
+    m = Minesweeper.new()
+  end
   m.run
 end
