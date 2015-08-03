@@ -26,8 +26,11 @@ class Minesweeper
   end
 
   def num_neighbor_bombs(pos)
+    num_bombs = 0
     neighbors(pos).each do |n_pos|
-      board[n_pos].has_bomb
+      num_bombs += 1 if board[n_pos].has_bomb
+    end
+    num_bombs
   end
 
 
