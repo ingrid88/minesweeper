@@ -1,9 +1,15 @@
 class Minesweeper
+  NUM_BOMBS = 10
+  BOARD_SIZE = 9
+
   def initialize
-    @board = Array.new(9) { Array.new(9) }
+    @board = Array.new(BOARD_SIZE) { Array.new(BOARD_SIZE) }
   end
 
+  def populate_board
+    
 
+  end
 end
 
 class Tile
