@@ -57,6 +57,7 @@ class Minesweeper
 
   def reveal(pos)
     # if position has a bomb the user loses firstly
+    return if self[pos].flagged
     raise "you lose" if self[pos].has_bomb
     # if the number of bombs is greater than zero then set revealed = true
     #self[pos].revealed = true if self[pos].num_bombs > 0
@@ -78,6 +79,12 @@ class Minesweeper
       end
       print "\n"
     end
+  end
+
+  def flag_bomb(pos)
+
+    return if self[pos].revealed
+    self[pos].flagged = !self[pos].flagged
   end
 
 
