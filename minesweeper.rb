@@ -57,12 +57,12 @@ class Minesweeper
   def reveal(pos)
     # if position has a bomb the user loses firstly
     return if self[pos].flagged
-    raise "you lose" if self[pos].has_bomb
+    #raise "you lose" if self[pos].has_bomb
     # if the number of bombs is greater than zero then set revealed = true
     #self[pos].revealed = true if self[pos].num_bombs > 0
     # if # bombs is 0 then look at neighbors
     self[pos].revealed = true
-    if self[pos].num_bombs == 0
+    if self[pos].num_bombs == 0 && !self[pos].has_bomb
       #figure out neighbor
       neighbors(pos).each do |n_pos|
         reveal(n_pos) unless (self[n_pos].has_bomb || self[n_pos].revealed)
@@ -89,9 +89,17 @@ class Minesweeper
   def run
     until has_won?
       render
+      if bomb_revealed?
+        puts "BOMB! YOU LOSE!"
+        break
+      end
       prompt_user
     end
     puts "You won!"
+  end
+
+  def bomb_revealed?
+    mine_positions.any? {|bomb| self[bomb].revealed}
   end
 
   def prompt_user
@@ -119,12 +127,11 @@ class Minesweeper
   end
 
   def in_board?(pos)
-      pos.all? {|coord| coord.between?(0,8)}
+    pos.all? {|coord| coord.between?(0,8)}
   end
 
   def has_won?
     # all unbombed tiles revealed
-
     # if revealed and if not bombed
     flattened = board.flatten
     !flattened.any?{ |tile| !tile.has_bomb && !tile.revealed}
@@ -148,6 +155,8 @@ class Tile
     return "* " if !revealed
     if revealed && num_bombs > 0
       return "#{num_bombs} "
+    elsif revealed && has_bomb
+      "X "
     else
       "_ "
     end
