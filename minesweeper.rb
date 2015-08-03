@@ -8,19 +8,37 @@ class Minesweeper
   end
 
   def populate_board
+    mine_positions = add_mines
     board.each_index do |row|
       board.each_index do |col|
-        board[row][col] = Tile.new
+        bombed = nil
+        if mine_positions.include?([row, col])
+          bombed = true
+        else
+          bombed = false
+        end
+        board[row][col] = Tile.new(bombed)
       end
     end
 
   end
+
+  def add_mines
+    mine_positions = []
+    until mine_positions.length == NUM_BOMBS
+      rand_x = rand(0...BOARD_SIZE)
+      rand_y = rand(0...BOARD_SIZE)
+      mine_positions << [rand_x, rand_y] if !mine_positions.include?([rand_x, rand_y])
+    end
+    mine_positions
+  end
+
 end
 
 class Tile
   attr_accessor :bombed, :flagged, :revealed
-  def initialize
-    @bombed = false
+  def initialize(bombed)
+    @bombed = bombed
     @flagged = false
     @revealed = false
   end
