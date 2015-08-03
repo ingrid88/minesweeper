@@ -12,9 +12,9 @@ class Minesweeper
   def populate_board
     board.each_index do |row|
       board.each_index do |col|
-        bombed = false
-        bombed = true if mine_positions.include?([row, col])
-        board[row][col] = Tile.new(bombed)
+        has_bomb = false
+        has_bomb = true if mine_positions.include?([row, col])
+        board[row][col] = Tile.new(has_bomb)
       end
     end
 
@@ -26,18 +26,21 @@ class Minesweeper
   end
 
   def num_neighbor_bombs(pos)
-
-    board[pos].bombed
+    neighbors(pos).each do |n_pos|
+      board[n_pos].has_bomb
   end
 
 
   def neighbors(pos)
+    x, y = pos
     new_pos_list = []
     NEIGHBORS_DELTAS.each do |change|
       dx,dy = change
       new_pos_list << [x + dx, y + dy]
     end
-    new_pos_list
+    new_pos_list.select do |pos|
+      pos.all? {|coord| coord.between?(0,8)}
+    end
   end
 
 
@@ -63,9 +66,9 @@ class Minesweeper
 end
 
 class Tile
-  attr_accessor :bombed, :flagged, :revealed,
-  def initialize(bombed)
-    @bombed = bombed
+  attr_accessor :has_bomb, :flagged, :revealed,
+  def initialize(has_bomb)
+    @has_bomb = has_bomb
     @flagged = false
     @revealed = false
   end
