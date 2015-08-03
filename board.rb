@@ -6,7 +6,7 @@ class Board
   NUM_BOMBS = 10
   BOARD_SIZE = 9
 
-  def initialize()
+  def initialize
     @grid = Array.new(BOARD_SIZE) { Array.new(BOARD_SIZE) }
     @mine_positions = generate_mine_positions
     populate_board

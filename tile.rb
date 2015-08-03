@@ -28,7 +28,7 @@ class Tile
     if revealed && has_bomb
       return "X "
     elsif revealed && num_bombs > 0
-      return "#{num_bombs} "
+      return "#{num_bombs} ".colorize(NUM_COLORS[num_bombs])
     else
       "_ "
     end
