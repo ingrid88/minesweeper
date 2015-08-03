@@ -1,4 +1,5 @@
 require_relative 'board'
+require 'yaml'
 
 class Minesweeper
 
@@ -40,6 +41,7 @@ class Minesweeper
     end
   end
 
+
   def prompt_user
     puts "Input position and r/f (reveal or flag)"
     input = gets.chomp.split(",")
@@ -48,6 +50,12 @@ class Minesweeper
   end
 
   def handle_input(input)
+    puts input
+    sleep(3)
+    if input == ['s']
+      save_game
+      puts "your game was saved"
+    end
     x,y,opt = input
     x, y = x.to_i, y.to_i
     if board.in_board?([x,y])
@@ -58,9 +66,11 @@ class Minesweeper
         flag_bomb([x,y])
       else
         puts "Invalid option"
+        sleep(1)
       end
     else
       puts "Invalid coordinate"
+      sleep(1)
     end
   end
 
@@ -70,6 +80,13 @@ class Minesweeper
 
   def tiles
     board.grid.flatten
+  end
+
+  def save_game
+    saved_game = self.to_yaml
+    #write file and store in local directory
+    file_name = 'saved_game.txt'
+    File.open(file_name, 'w') { |file| file.write(saved_game) }
   end
 
 end
